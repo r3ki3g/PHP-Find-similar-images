@@ -1,7 +1,10 @@
 <?php
+/*
+If you are not rekieg : STILL DEVELOPING ... you can not contribute/use this yet..
 
+*/
 //connection delay model
-//sleep(1.2);
+//sleep(1);
 
 //root directiory declaration
 $httpRoot = 'D:/HTTP_WEB/realfeedserver/';
@@ -257,9 +260,9 @@ if (($_GET['search']??-1) !=-1)
     fclose($fileData);
 
     foreach ($filesInImageSet as $fileName) {
-        if ($fileName != '.' && $fileName != '..') 
+        if ($fileName != '.' && $fileName != '..' && preg_match('/(\.jpeg|\.jpg)$/i',$fileName)) 
         {
-
+            $timeAtStart  =  microtime(true);
             echo 'Searching images for' . br.br;
             echo '<img src="http://www.realfeed.com/demo/imageSet/' .$fileName. '" style="max-width:500px;border:solid 3px #000000"/>' . br . br;
 
@@ -267,7 +270,8 @@ if (($_GET['search']??-1) !=-1)
             $serachQueryImg -> fromFile(httpRoot . '/demo/imageSet/' . $fileName);
             $simplifiedSQI = simplify($serachQueryImg, 5);
 
-            for ($i=0;$i<count($imageData);$i++) {
+            for ($i=0;$i<count($imageData);$i++) 
+            {
                 $thisDataImage = $imageData[$i];
                 $thisImageName = $thisDataImage[0];
                 $thisData = $thisDataImage[1];
@@ -280,10 +284,11 @@ if (($_GET['search']??-1) !=-1)
                 }
                 else if($similarityFrac == -1)
                 {
-                    echo 'BIG ERROR | box counts does not match from data set to images' . br;exit();
+                    echo 'BIG ERROR | box counts does not match from data set to images...process force stoped' . br;exit();
                 }
             }
-
+            $timeAtEnd = microtime(true);
+            echo "Time taken to get that results : " . strval($timeAtEnd - $timeAtStart) . "s";
             echo hr;
         }
     }
